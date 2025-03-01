@@ -268,7 +268,7 @@ function update_octoapp() {
     ### read PKGLIST and install possible new dependencies
     install_octoapp_dependencies
     ### install possible new python dependencies
-    "${OCTOAPP_ENV}"/bin/pip install -r "${OCTOAPP_DIR}/requirements.txt"
+    "${OCTOAPP_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${OCTOAPP_DIR}/requirements.txt"
   fi
 
   ok_msg "Update complete!"

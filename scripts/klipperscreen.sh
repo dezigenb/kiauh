@@ -127,7 +127,7 @@ function update_klipperscreen() {
 
   if [[ $(md5sum "${KLIPPERSCREEN_DIR}/scripts/KlipperScreen-requirements.txt" | cut -d " " -f1) != "${old_md5}" ]]; then
     status_msg "New dependecies detected..."
-    "${KLIPPERSCREEN_ENV}"/bin/pip install -r "${KLIPPERSCREEN_DIR}/scripts/KlipperScreen-requirements.txt"
+    "${KLIPPERSCREEN_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPERSCREEN_DIR}/scripts/KlipperScreen-requirements.txt"
     ok_msg "Dependencies have been installed!"
   fi
 
@@ -220,7 +220,7 @@ function patch_klipperscreen_update_manager() {
 [update_manager KlipperScreen]
 type: git_repo
 path: ${HOME}/KlipperScreen
-origin: https://github.com/jordanruthe/KlipperScreen.git
+origin: https://ghproxy.cn/https://github.com/jordanruthe/KlipperScreen.git
 env: ${HOME}/.KlipperScreen-env/bin/python
 requirements: scripts/KlipperScreen-requirements.txt
 install_script: scripts/KlipperScreen-install.sh

@@ -133,7 +133,7 @@ function create_telegram_bot_virtualenv() {
   ### always create a clean virtualenv
   [[ -d ${TELEGRAM_BOT_ENV} ]] && rm -rf "${TELEGRAM_BOT_ENV}"
   if virtualenv -p /usr/bin/python3 --system-site-packages "${TELEGRAM_BOT_ENV}"; then
-    "${TELEGRAM_BOT_ENV}"/bin/pip install -r "${TELEGRAM_BOT_DIR}/scripts/requirements.txt"
+    "${TELEGRAM_BOT_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${TELEGRAM_BOT_DIR}/scripts/requirements.txt"
   else
     log_error "failure while creating python3 moonraker-telegram-bot-env"
     error_msg "Creation of Moonraker Telegram Bot virtualenv failed!"
@@ -432,7 +432,7 @@ function update_telegram_bot() {
     ### read PKGLIST and install possible new dependencies
     install_telegram_bot_dependencies
     ### install possible new python dependencies
-    "${TELEGRAM_BOT_ENV}"/bin/pip install -r "${TELEGRAM_BOT_DIR}/scripts/requirements.txt"
+    "${TELEGRAM_BOT_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${TELEGRAM_BOT_DIR}/scripts/requirements.txt"
   fi
 
   ok_msg "Update complete!"
@@ -525,7 +525,7 @@ function patch_telegram_bot_update_manager() {
 [update_manager moonraker-telegram-bot]
 type: git_repo
 path: ~/moonraker-telegram-bot
-origin: https://github.com/nlef/moonraker-telegram-bot.git
+origin: https://ghproxy.cn/https://github.com/nlef/moonraker-telegram-bot.git
 env: ~/moonraker-telegram-bot-env/bin/python
 requirements: scripts/requirements.txt
 install_script: scripts/install.sh

@@ -38,7 +38,7 @@ function set_globals() {
   #================= MOONRAKER ==================#
   MOONRAKER_ENV="${HOME}/moonraker-env"
   MOONRAKER_DIR="${HOME}/moonraker"
-  MOONRAKER_REPO="https://github.com/Arksine/moonraker.git"
+  MOONRAKER_REPO="https://ghproxy.cn/https://github.com/Arksine/moonraker.git"
 
   #================= MAINSAIL ===================#
   MAINSAIL_DIR="${HOME}/mainsail"
@@ -49,16 +49,16 @@ function set_globals() {
   #=============== KLIPPERSCREEN ================#
   KLIPPERSCREEN_ENV="${HOME}/.KlipperScreen-env"
   KLIPPERSCREEN_DIR="${HOME}/KlipperScreen"
-  KLIPPERSCREEN_REPO="https://github.com/jordanruthe/KlipperScreen.git"
+  KLIPPERSCREEN_REPO="https://ghproxy.cn/https://github.com/jordanruthe/KlipperScreen.git"
 
   #========== MOONRAKER-TELEGRAM-BOT ============#
   TELEGRAM_BOT_ENV="${HOME}/moonraker-telegram-bot-env"
   TELEGRAM_BOT_DIR="${HOME}/moonraker-telegram-bot"
-  TELEGRAM_BOT_REPO="https://github.com/nlef/moonraker-telegram-bot.git"
+  TELEGRAM_BOT_REPO="https://ghproxy.cn/https://github.com/nlef/moonraker-telegram-bot.git"
 
   #=============== PRETTY-GCODE =================#
   PGC_DIR="${HOME}/pgcode"
-  PGC_REPO="https://github.com/Kragrathea/pgcode"
+  PGC_REPO="https://ghproxy.cn/https://github.com/Kragrathea/pgcode"
 
   #================== NGINX =====================#
   NGINX_SA="/etc/nginx/sites-available"
@@ -67,29 +67,29 @@ function set_globals() {
 
   #=============== MOONRAKER-OBICO ================#
   MOONRAKER_OBICO_DIR="${HOME}/moonraker-obico"
-  MOONRAKER_OBICO_REPO="https://github.com/TheSpaghettiDetective/moonraker-obico.git"
+  MOONRAKER_OBICO_REPO="https://ghproxy.cn/https://github.com/TheSpaghettiDetective/moonraker-obico.git"
 
   #=============== OCTOEVERYWHERE ================#
   OCTOEVERYWHERE_ENV="${HOME}/octoeverywhere-env"
   OCTOEVERYWHERE_DIR="${HOME}/octoeverywhere"
-  OCTOEVERYWHERE_REPO="https://github.com/QuinnDamerell/OctoPrint-OctoEverywhere.git"
+  OCTOEVERYWHERE_REPO="https://ghproxy.cn/https://github.com/QuinnDamerell/OctoPrint-OctoEverywhere.git"
 
   #=============== Crowsnest ================#
   CROWSNEST_DIR="${HOME}/crowsnest"
-  CROWSNEST_REPO="https://github.com/mainsail-crew/crowsnest.git"
+  CROWSNEST_REPO="https://ghproxy.cn/https://github.com/mainsail-crew/crowsnest.git"
 
   #=============== Mobileraker ================#
   MOBILERAKER_ENV="${HOME}/mobileraker-env"
   MOBILERAKER_DIR="${HOME}/mobileraker_companion"
-  MOBILERAKER_REPO="https://github.com/Clon1998/mobileraker_companion.git"
+  MOBILERAKER_REPO="https://ghproxy.cn/https://github.com/Clon1998/mobileraker_companion.git"
 
   #=============== OCTOAPP ================#
   OCTOAPP_ENV="${HOME}/octoapp-env"
   OCTOAPP_DIR="${HOME}/octoapp"
-  OCTOAPP_REPO="https://github.com/crysxd/OctoApp-Plugin.git"
+  OCTOAPP_REPO="https://ghproxy.cn/https://github.com/crysxd/OctoApp-Plugin.git"
 
   #=============== Spoolman ================#
   SPOOLMAN_DIR="${HOME}/Spoolman"
   SPOOLMAN_DB_DIR="${HOME}/.local/share/spoolman"
-  SPOOLMAN_REPO="https://api.github.com/repos/Donkie/Spoolman/releases/latest"
+  SPOOLMAN_REPO="https://gh.llkk.cc/https://api.github.com/repos/Donkie/Spoolman/releases/latest"
 }

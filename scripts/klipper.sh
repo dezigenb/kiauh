@@ -253,8 +253,8 @@ function clone_klipper() {
   local repo=${1} branch=${2}
 
   [[ -z ${repo} ]] && repo="${KLIPPER_REPO}"
-  repo=$(echo "${repo}" | sed -r "s/^(http|https):\/\/github\.com\///i; s/\.git$//")
-  repo="https://github.com/${repo}"
+  repo=$(echo "${repo}" | sed -r "s/^(http|https):\/\/ghproxy\.cn\///i; s/\.git$//")
+  repo="https://ghproxy.cn/${repo}"
 
   [[ -z ${branch} ]] && branch="master"
 
@@ -264,7 +264,7 @@ function clone_klipper() {
   status_msg "Cloning Klipper from ${repo} ..."
 
   cd "${HOME}" || exit 1
-  if git clone "${repo}" "${KLIPPER_DIR}"; then
+  if git clone --depth=1 "${repo}" "${KLIPPER_DIR}"; then
     cd "${KLIPPER_DIR}" && git checkout "${branch}"
   else
     print_error "Cloning Klipper from\n ${repo}\n failed!"
@@ -280,8 +280,8 @@ function create_klipper_virtualenv() {
   status_msg "Installing $("python${python_version}" -V) virtual environment..."
 
   if virtualenv -p "python${python_version}" "${KLIPPY_ENV}"; then
-    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip install -U pip
-    "${KLIPPY_ENV}"/bin/pip install -r "${KLIPPER_DIR}"/scripts/klippy-requirements.txt
+    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && "${KLIPPY_ENV}"/bin/pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+    "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPER_DIR}"/scripts/klippy-requirements.txt
   else
     log_error "failure while creating python3 klippy-env"
     error_msg "Creation of Klipper virtualenv failed!"
@@ -530,7 +530,7 @@ function update_klipper() {
     ### read PKGLIST and install possible new dependencies
     install_klipper_packages "${py_ver}"
     ### install possible new python dependencies
-    "${KLIPPY_ENV}"/bin/pip install -r "${KLIPPER_DIR}/scripts/klippy-requirements.txt"
+    "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPER_DIR}/scripts/klippy-requirements.txt"
   fi
 
   ok_msg "Update complete!"

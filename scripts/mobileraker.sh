@@ -134,7 +134,7 @@ function update_mobileraker() {
 
   if [[ $(md5sum "${MOBILERAKER_DIR}/scripts/mobileraker-requirements.txt" | cut -d " " -f1) != "${old_md5}" ]]; then
     status_msg "New dependecies detected..."
-    "${MOBILERAKER_ENV}"/bin/pip install -r "${MOBILERAKER_DIR}/scripts/mobileraker-requirements.txt"
+    "${MOBILERAKER_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${MOBILERAKER_DIR}/scripts/mobileraker-requirements.txt"
     ok_msg "Dependencies have been installed!"
   fi
 
@@ -228,7 +228,7 @@ function patch_mobileraker_update_manager() {
 [update_manager mobileraker]
 type: git_repo
 path: ${HOME}/mobileraker_companion
-origin: https://github.com/Clon1998/mobileraker_companion.git
+origin: https://ghproxy.cn/https://github.com/Clon1998/mobileraker_companion.git
 primary_branch:main
 managed_services: mobileraker
 env: ${HOME}/mobileraker-env/bin/python

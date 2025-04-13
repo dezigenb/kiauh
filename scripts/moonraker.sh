@@ -194,6 +194,7 @@ function moonraker_setup() {
   create_moonraker_conf "${instance_arr[@]}"
 
   ### step 4: create moonraker instances
+  apt install systemctl
   configure_moonraker_service "${instance_arr[@]}"
 
   ### step 5: create polkit rules for moonraker

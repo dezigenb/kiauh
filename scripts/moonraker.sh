@@ -185,9 +185,6 @@ function moonraker_setup() {
 
   ### step 1: clone moonraker
   clone_moonraker "${MOONRAKER_REPO}"
-  cp -f ~/kiauh/resources/install-moonraker.sh ~/moonraker/scripts/
-  cp -f ~/kiauh/resources/system-dependencies.json ~/moonraker/scripts/
-
   ### step 2: install moonraker dependencies and create python virtualenv
   status_msg "Installing dependencies ..."
   install_moonraker_dependencies

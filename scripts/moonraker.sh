@@ -194,7 +194,6 @@ function moonraker_setup() {
   create_moonraker_conf "${instance_arr[@]}"
 
   ### step 4: create moonraker instances
-  apt install systemctl
   configure_moonraker_service "${instance_arr[@]}"
 
   ### step 5: create polkit rules for moonraker
@@ -234,7 +233,7 @@ function create_moonraker_conf() {
 
   port=7125
   lan="$(hostname -I | cut -d" " -f1 | cut -d"." -f1-2).0.0/16"
-
+  apt install systemctl
   if (( moonraker_count == 1 )); then
     printer_data="${HOME}/printer_data"
     cfg_dir="${printer_data}/config"

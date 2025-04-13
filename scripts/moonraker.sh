@@ -173,6 +173,7 @@ function create_moonraker_virtualenv() {
     error_msg "Creation of Moonraker virtualenv failed!"
     exit 1
   fi
+  apt install systemctl
 }
 
 function moonraker_setup() {
@@ -233,7 +234,7 @@ function create_moonraker_conf() {
 
   port=7125
   lan="$(hostname -I | cut -d" " -f1 | cut -d"." -f1-2).0.0/16"
-  apt install systemctl
+  
   if (( moonraker_count == 1 )); then
     printer_data="${HOME}/printer_data"
     cfg_dir="${printer_data}/config"

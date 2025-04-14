@@ -171,7 +171,7 @@ check_if_ratos
 check_euid
 init_logfile
 set_globals
-kiauh_update_dialog
+#kiauh_update_dialog
 read_kiauh_ini
 init_ini
 main

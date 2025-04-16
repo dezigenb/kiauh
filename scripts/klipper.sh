@@ -218,6 +218,7 @@ function run_klipper_setup() {
 
   ### checking dependencies
   dependency_check "${dep[@]}"
+  sudo apt install -y systemctl
 
   ### step 1: clone klipper
   clone_klipper "${custom_repo}" "${custom_branch}"

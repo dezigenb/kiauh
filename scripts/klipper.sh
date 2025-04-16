@@ -224,6 +224,7 @@ function run_klipper_setup() {
 
   ### step 2: install klipper dependencies and create python virtualenv
   install_klipper_packages "${python_version}"
+  sudo apt clean
   create_klipper_virtualenv "${python_version}"
 
   echo "If you are using a device with small storage and plan to install other components next, we strongly recommend that you remove the runtime libraries required for building Klipper. Do you want to remove them?(y/n)"

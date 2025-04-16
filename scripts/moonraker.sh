@@ -173,7 +173,6 @@ function create_moonraker_virtualenv() {
     error_msg "Creation of Moonraker virtualenv failed!"
     exit 1
   fi
-  sudo apt install -y systemctl
 }
 
 function moonraker_setup() {

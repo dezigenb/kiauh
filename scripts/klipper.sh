@@ -225,10 +225,12 @@ function run_klipper_setup() {
   ### step 2: install klipper dependencies and create python virtualenv
   install_klipper_packages "${python_version}"
   create_klipper_virtualenv "${python_version}"
-  echo "If you are using a device with limited storage and plan to install other components next, we strongly recommend that you remove the runtime libraries required for building Klipper. Do you want to remove them?(y/n)"
+
+  echo "If you are using a device with small storage and plan to install other components next, we strongly recommend that you remove the runtime libraries required for building Klipper. Do you want to remove them?(y/n)"
   read input
   if [ "$input" = "y" ] || [ "$input" = "Y" ]; then
-      sudo apt autoremove -y libnewlib-arm-none-eabi gcc-arm-none-eabi
+    sudo apt autoremove -y libnewlib-arm-none-eabi gcc-arm-none-eabi
+    sudo apt clean
   fi
 
 

@@ -8,7 +8,6 @@
 
 import pytest
 
-from src.simple_config_parser.constants import LineType
 from src.simple_config_parser.simple_config_parser import (
     NoOptionError,
     NoSectionError,
@@ -149,11 +148,13 @@ def test_getfloat_fallback(parser):
 def test_set_existing_option(parser):
     parser.set_option("section_1", "new_option", "new_value")
     assert parser.getval("section_1", "new_option") == "new_value"
-    assert parser.config["section_1"]["elements"][4] is not None
-    assert parser.config["section_1"]["elements"][4]["type"] == LineType.OPTION.value
-    assert parser.config["section_1"]["elements"][4]["name"] == "new_option"
-    assert parser.config["section_1"]["elements"][4]["value"] == "new_value"
-    assert parser.config["section_1"]["elements"][4]["raw"] == "new_option: new_value\n"
+    assert parser.config["section_1"]["new_option"]["_raw"] == "new_option: new_value\n"
+
+    parser.set_option("section_1", "new_option", "new_value_2")
+    assert parser.getval("section_1", "new_option") == "new_value_2"
+    assert (
+        parser.config["section_1"]["new_option"]["_raw"] == "new_option: new_value_2\n"
+    )
 
 
 def test_set_new_option(parser):
@@ -169,16 +170,7 @@ def test_set_new_option(parser):
         "value_2",
         "value_3",
     ]
-
-    assert parser.config["section_2"]["elements"][1] is not None
-    assert parser.config["section_2"]["elements"][1]["type"] == LineType.OPTION_BLOCK.value
-    assert parser.config["section_2"]["elements"][1]["name"] == "array_option"
-    assert parser.config["section_2"]["elements"][1]["value"] == [
-        "value_1",
-        "value_2",
-        "value_3",
-    ]
-    assert parser.config["section_2"]["elements"][1]["raw"] == "array_option:\n"
+    assert parser.config["section_2"]["array_option"]["_raw"] == "array_option:\n"
 
 
 def test_remove_option(parser):

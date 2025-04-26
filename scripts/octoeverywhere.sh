@@ -284,7 +284,7 @@ function update_octoeverywhere() {
     ### read PKGLIST and install possible new dependencies
     install_octoeverywhere_dependencies
     ### install possible new python dependencies
-    "${OCTOEVERYWHERE_ENV}"/bin/pip install -r "${OCTOEVERYWHERE_DIR}/requirements.txt"
+    "${OCTOEVERYWHERE_ENV}"/bin/pip -i https://mirrors.ustc.edu.cn/pypi/simple install -r "${OCTOEVERYWHERE_DIR}/requirements.txt"
   fi
 
   ok_msg "Update complete!"

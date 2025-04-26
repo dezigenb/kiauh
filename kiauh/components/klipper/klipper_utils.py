@@ -11,7 +11,6 @@ from __future__ import annotations
 import grp
 import os
 import shutil
-from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import Dict, List
 
@@ -19,7 +18,6 @@ from components.klipper import (
     KLIPPER_BACKUP_DIR,
     KLIPPER_DIR,
     KLIPPER_ENV_DIR,
-    KLIPPER_INSTALL_SCRIPT,
     MODULE_PATH,
 )
 from components.klipper.klipper import Klipper
@@ -39,15 +37,10 @@ from core.submodules.simple_config_parser.src.simple_config_parser.simple_config
     SimpleConfigParser,
 )
 from core.types.component_status import ComponentStatus
-from utils.common import check_install_dependencies, get_install_status
-from utils.fs_utils import check_file_exist
+from utils.common import get_install_status
 from utils.input_utils import get_confirm, get_number_input, get_string_input
 from utils.instance_utils import get_instances
-from utils.sys_utils import (
-    cmd_sysctl_service,
-    install_python_packages,
-    parse_packages_from_file,
-)
+from utils.sys_utils import cmd_sysctl_service
 
 
 def get_klipper_status() -> ComponentStatus:
@@ -201,56 +194,3 @@ def backup_klipper_dir() -> None:
     bm = BackupManager()
     bm.backup_directory("klipper", source=KLIPPER_DIR, target=KLIPPER_BACKUP_DIR)
     bm.backup_directory("klippy-env", source=KLIPPER_ENV_DIR, target=KLIPPER_BACKUP_DIR)
-
-
-def install_klipper_packages() -> None:
-    script = KLIPPER_INSTALL_SCRIPT
-    packages = parse_packages_from_file(script)
-
-    # Add pkg-config for rp2040 build
-    packages.append("pkg-config")
-
-    # Add dbus requirement for DietPi distro
-    if check_file_exist(Path("/boot/dietpi/.version")):
-        packages.append("dbus")
-
-    check_install_dependencies({*packages})
-
-
-def install_input_shaper_deps() -> None:
-    if not KLIPPER_ENV_DIR.exists():
-        Logger.print_warn("Required Klipper python environment not found!")
-        return
-
-    Logger.print_dialog(
-        DialogType.CUSTOM,
-        [
-            "Resonance measurements and shaper auto-calibration require additional "
-            "software dependencies which are not installed by default. "
-            "If you agree, the following additional system packages will be installed:",
-            "● python3-numpy",
-            "● python3-matplotlib",
-            "● libatlas-base-dev",
-            "● libopenblas-dev",
-            "\n\n",
-            "Also, the following Python package will be installed:",
-            "● numpy",
-        ],
-        custom_title="Install Input Shaper Dependencies",
-    )
-    if not get_confirm(
-        "Do you want to install the required packages?", default_choice=False
-    ):
-        return
-
-    apt_deps = (
-        "python3-numpy",
-        "python3-matplotlib",
-        "libatlas-base-dev",
-        "libopenblas-dev",
-    )
-    check_install_dependencies({*apt_deps})
-
-    py_deps = ("numpy",)
-
-    install_python_packages(KLIPPER_ENV_DIR, {*py_deps})

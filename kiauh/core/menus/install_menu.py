@@ -12,9 +12,9 @@ import textwrap
 from typing import Type
 
 from components.crowsnest.crowsnest import install_crowsnest
-from components.klipper.services.klipper_setup_service import KlipperSetupService
+from components.klipper import klipper_setup
 from components.klipperscreen.klipperscreen import install_klipperscreen
-from components.moonraker.services.moonraker_setup_service import MoonrakerSetupService
+from components.moonraker import moonraker_setup
 from components.webui_client.client_config.client_config_setup import (
     install_client_config,
 )
@@ -36,8 +36,6 @@ class InstallMenu(BaseMenu):
         self.title = "Installation Menu"
         self.title_color = Color.GREEN
         self.previous_menu: Type[BaseMenu] | None = previous_menu
-        self.klsvc = KlipperSetupService()
-        self.mrsvc = MoonrakerSetupService()
 
     def set_previous_menu(self, previous_menu: Type[BaseMenu] | None) -> None:
         from core.menus.main_menu import MainMenu
@@ -77,10 +75,10 @@ class InstallMenu(BaseMenu):
         print(menu, end="")
 
     def install_klipper(self, **kwargs) -> None:
-        self.klsvc.install()
+        klipper_setup.install_klipper()
 
     def install_moonraker(self, **kwargs) -> None:
-        self.mrsvc.install()
+        moonraker_setup.install_moonraker()
 
     def install_mainsail(self, **kwargs) -> None:
         client: MainsailData = MainsailData()

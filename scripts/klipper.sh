@@ -224,7 +224,11 @@ function run_klipper_setup() {
 
   ### step 2: install klipper dependencies and create python virtualenv
   install_klipper_packages "${python_version}"
+  sudo apt clean
   create_klipper_virtualenv "${python_version}"
+  sudo apt autoremove -y libnewlib-arm-none-eabi gcc-arm-none-eabi
+  sudo apt clean
+
 
   ### step 3: create klipper instances
   for instance in "${instance_names[@]}"; do
@@ -249,12 +253,30 @@ function run_klipper_setup() {
   print_confirm "${confirm}" && return
 }
 
+function dispose_klipper() {
+  # 指定要扫描的文件夹路径
+  TARGET_DIR=${KLIPPER_DIR}/scripts
+    
+  # 查找所有.sh文件并处理
+  find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
+      # 检查文件是否包含目标字符串
+      if grep -q 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' "$file"; then
+        # 创建一个临时文件
+        temp_file=$(mktemp)
+        # 删除包含目标字符串的行并写入临时文件
+        grep -v 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' "$file" > "$temp_file"
+        # 用临时文件替换原文件
+        mv "$temp_file" "$file"
+      fi
+  done
+}
+
 function clone_klipper() {
   local repo=${1} branch=${2}
 
   [[ -z ${repo} ]] && repo="${KLIPPER_REPO}"
-  repo=$(echo "${repo}" | sed -r "s/^(http|https):\/\/github\.com\///i; s/\.git$//")
-  repo="https://github.com/${repo}"
+  repo=$(echo "${repo}" | sed -r "s/^(http|https):\/\/ghproxy\.cn\///i; s/\.git$//")
+  repo="https://ghproxy.cn/${repo}"
 
   [[ -z ${branch} ]] && branch="master"
 
@@ -264,7 +286,8 @@ function clone_klipper() {
   status_msg "Cloning Klipper from ${repo} ..."
 
   cd "${HOME}" || exit 1
-  if git clone "${repo}" "${KLIPPER_DIR}"; then
+  if git clone --depth=1 "${repo}" "${KLIPPER_DIR}"; then
+    dispose_klipper
     cd "${KLIPPER_DIR}" && git checkout "${branch}"
   else
     print_error "Cloning Klipper from\n ${repo}\n failed!"
@@ -280,8 +303,8 @@ function create_klipper_virtualenv() {
   status_msg "Installing $("python${python_version}" -V) virtual environment..."
 
   if virtualenv -p "python${python_version}" "${KLIPPY_ENV}"; then
-    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip install -U pip
-    "${KLIPPY_ENV}"/bin/pip install -r "${KLIPPER_DIR}"/scripts/klippy-requirements.txt
+    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && "${KLIPPY_ENV}"/bin/pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+    "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPER_DIR}"/scripts/klippy-requirements.txt
   else
     log_error "failure while creating python3 klippy-env"
     error_msg "Creation of Klipper virtualenv failed!"
@@ -304,8 +327,6 @@ function install_klipper_packages() {
   packages=$(grep "PKGLIST=" "${install_script}" | cut -d'"' -f2 | sed 's/\${PKGLIST}//g' | tr -d '\n')
   ### add dfu-util for octopi-images
   packages+=" dfu-util"
-  ### add pkg-config for rp2040 build
-  packages+=" pkg-config"
   ### add dbus requirement for DietPi distro
   [[ -e "/boot/dietpi/.version" ]] && packages+=" dbus"
 
@@ -529,10 +550,11 @@ function update_klipper() {
 
     status_msg "Updating Klipper ..."
     cd "${KLIPPER_DIR}" && git pull
+    dispose_klipper
     ### read PKGLIST and install possible new dependencies
     install_klipper_packages "${py_ver}"
     ### install possible new python dependencies
-    "${KLIPPY_ENV}"/bin/pip install -r "${KLIPPER_DIR}/scripts/klippy-requirements.txt"
+    "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPER_DIR}/scripts/klippy-requirements.txt"
   fi
 
   ok_msg "Update complete!"

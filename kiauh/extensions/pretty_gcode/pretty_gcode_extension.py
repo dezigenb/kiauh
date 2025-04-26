@@ -43,7 +43,7 @@ class PrettyGcodeExtension(BaseExtension):
 
         port = get_number_input(
             "On which port should PrettyGCode run",
-            min_value=0,
+            min_count=0,
             default=7136,
             allow_go_back=True,
         )
@@ -78,7 +78,7 @@ class PrettyGcodeExtension(BaseExtension):
     def update_extension(self, **kwargs) -> None:
         Logger.print_status("Updating PrettyGCode for Klipper ...")
         try:
-            git_pull_wrapper(PGC_DIR)
+            git_pull_wrapper(PGC_REPO, PGC_DIR)
 
         except Exception as e:
             Logger.print_error(f"Error during PrettyGCode for Klipper update: {e}")

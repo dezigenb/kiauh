@@ -26,10 +26,9 @@ def git_clone_wrapper(
 ) -> None:
     """
     Clones a repository from the given URL and checks out the specified branch if given.
-    The clone will be performed with the '--filter=blob:none' flag to perform a blobless clone.
 
     :param repo: The URL of the repository to clone.
-    :param branch: The branch to check out. If None, master or main, no checkout will be performed.
+    :param branch: The branch to check out. If None, the default branch will be checked out.
     :param target_dir: The directory where the repository will be cloned.
     :param force: Force the cloning of the repository even if it already exists.
     :return: None
@@ -44,11 +43,8 @@ def git_clone_wrapper(
                 return
             shutil.rmtree(target_dir)
 
-        git_cmd_clone(repo, target_dir, blobless=True)
-
-        if branch not in ("master", "main"):
-            git_cmd_checkout(branch, target_dir)
-
+        git_cmd_clone(repo, target_dir)
+        git_cmd_checkout(branch, target_dir)
     except CalledProcessError:
         log = "An unexpected error occured during cloning of the repository."
         Logger.print_error(log)
@@ -58,14 +54,15 @@ def git_clone_wrapper(
         raise GitException(f"Error removing existing repository: {e.strerror}")
 
 
-def git_pull_wrapper(target_dir: Path) -> None:
+def git_pull_wrapper(repo: str, target_dir: Path) -> None:
     """
     A function that updates a repository using git pull.
 
+    :param repo: The repository to update.
     :param target_dir: The directory of the repository.
     :return: None
     """
-    Logger.print_status("Updating repository ...")
+    Logger.print_status(f"Updating repository '{repo}' ...")
     try:
         git_cmd_pull(target_dir)
     except CalledProcessError:
@@ -135,10 +132,8 @@ def get_local_tags(repo_path: Path, _filter: str | None = None) -> List[str]:
 
         tags: List[str] = result.split("\n")[:-1]
 
-        return sorted(
-            tags,
-            key=lambda x: [int(i) if i.isdigit() else i for i in re.split(r"(\d+)", x)],
-        )
+        return sorted(tags, key=lambda x: [int(i) if i.isdigit() else i for i in
+                                                re.split(r'(\d+)', x)])
 
     except CalledProcessError:
         return []
@@ -258,23 +253,11 @@ def get_remote_commit(repo: Path) -> str | None:
         return None
 
 
-def git_cmd_clone(repo: str, target_dir: Path, blobless: bool = False) -> None:
-    """
-    Clones a repository with optional blobless clone.
-
-    :param repo: URL of the repository to clone.
-    :param target_dir: Path where the repository will be cloned.
-    :param blobless: If True, perform a blobless clone by adding the '--filter=blob:none' flag.
-    """
+def git_cmd_clone(repo: str, target_dir: Path) -> None:
     try:
-        command = ["git", "clone"]
-
-        if blobless:
-            command.append("--filter=blob:none")
-
-        command += [repo, target_dir.as_posix()]
-
+        command = ["git", "clone", repo, target_dir.as_posix()]
         run(command, check=True)
+
         Logger.print_ok("Clone successful!")
     except CalledProcessError as e:
         error = e.stderr.decode() if e.stderr else "Unknown error"
@@ -336,25 +319,3 @@ def rollback_repository(repo_dir: Path, instance: Type[InstanceType]) -> None:
         Logger.print_error(f"An error occured during repo rollback:\n{e}")
 
     InstanceManager.start_all(instances)
-
-
-def get_repo_url(repo_dir: Path) -> str | None:
-    """
-    Get the remote repository URL for a git repository
-    :param repo_dir: Path to the git repository
-    :return: URL of the remote repository or None if not found
-    """
-    if not repo_dir.exists():
-        return None
-
-    try:
-        result = run(
-            ["git", "config", "--get", "remote.origin.url"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return result.stdout.strip()
-    except CalledProcessError:
-        return None

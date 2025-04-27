@@ -254,7 +254,8 @@ function run_klipper_setup() {
 }
 
 function dispose_klipper() {
-  echo -e "\naenum==3.1.15" >> ${KLIPPER_DIR}/scripts/klippy-requirements.txt
+  FILE="${KLIPPER_DIR}/scripts/klippy-requirements.txt"
+  sed -i 's/python-can==3\.3\.4/python-can~=4.3/g' "$FILE"
   # 指定要扫描的文件夹路径
   TARGET_DIR=${KLIPPER_DIR}/scripts
     

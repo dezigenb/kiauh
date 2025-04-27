@@ -254,6 +254,7 @@ function run_klipper_setup() {
 }
 
 function dispose_klipper() {
+  echo -e "\naenum==3.1.15" >> ${KLIPPER_DIR}/scripts/klippy-requirements.txt
   # 指定要扫描的文件夹路径
   TARGET_DIR=${KLIPPER_DIR}/scripts
     

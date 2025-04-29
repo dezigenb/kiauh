@@ -261,12 +261,16 @@ function dispose_klipper() {
     
   # 查找所有.sh文件并处理
   find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
-      # 检查文件是否包含目标字符串
-      if grep -q 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' "$file"; then
+      # 检查文件是否包含任何目标字符串
+      if grep -q -e 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' \
+                 -e 'PKGLIST="${PKGLIST} stm32flash libnewlib-arm-none-eabi"' \
+                 -e 'PKGLIST="${PKGLIST} gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 pkg-config"' "$file"; then
         # 创建一个临时文件
         temp_file=$(mktemp)
-        # 删除包含目标字符串的行并写入临时文件
-        grep -v 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' "$file" > "$temp_file"
+        # 删除包含所有目标字符串的行并写入临时文件
+        grep -v -e 'PKGLIST="${PKGLIST} avrdude gcc-avr binutils-avr avr-libc"' \
+               -e 'PKGLIST="${PKGLIST} stm32flash libnewlib-arm-none-eabi"' \
+               -e 'PKGLIST="${PKGLIST} gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 pkg-config"' "$file" > "$temp_file"
         # 用临时文件替换原文件
         mv "$temp_file" "$file"
       fi

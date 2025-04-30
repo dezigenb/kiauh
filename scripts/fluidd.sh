@@ -93,7 +93,8 @@ function install_fluidd_macros() {
     echo -e "| Otherwise you should consider to answer with 'yes' to |"
     echo -e "| download the recommended macros.                      |"
     bottom_border
-    read -p "${cyan}###### Download the recommended macros? (Y/n):${white} " yn
+    yn="y"
+    #read -p "${cyan}###### Download the recommended macros? (Y/n):${white} " yn
     case "${yn}" in
       Y|y|Yes|yes|"")
         select_msg "Yes"

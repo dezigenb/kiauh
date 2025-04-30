@@ -234,7 +234,8 @@ function run_klipper_setup() {
   for instance in "${instance_names[@]}"; do
     create_klipper_service "${instance}"
   done
-
+  
+  clone_klipper "${custom_repo}" "${custom_branch}" #还原被修改的文件
   ### step 4: enable and start all instances
   do_action_service "enable" "klipper"
   do_action_service "start" "klipper"

@@ -114,7 +114,8 @@ function moonraker_setup_dialog() {
   while true; do
     (( moonraker_count == 1 )) && local question="Install Moonraker?"
     (( moonraker_count > 1 )) && local question="Install ${moonraker_count} Moonraker instances?"
-    read -p "${cyan}###### ${question} (Y/n):${white} " yn
+    yn="y"
+    #read -p "${cyan}###### ${question} (Y/n):${white} " yn
     case "${yn}" in
       Y|y|Yes|yes|"")
         select_msg "Yes"
@@ -192,7 +193,7 @@ function moonraker_setup() {
 
   ### step 3: create moonraker.conf
   create_moonraker_conf "${instance_arr[@]}"
-
+  clone_moonraker "${MOONRAKER_REPO}"  #还原被修改的文件
   ### step 4: create moonraker instances
   configure_moonraker_service "${instance_arr[@]}"
 

@@ -485,7 +485,8 @@ function check_usergroups() {
 
     local yn
     while true; do
-      read -p "${cyan}###### Add user '${USER}' to group(s) now? (Y/n):${white} " yn
+      yn="y"
+      #read -p "${cyan}###### Add user '${USER}' to group(s) now? (Y/n):${white} " yn
       case "${yn}" in
         Y|y|Yes|yes|"")
           select_msg "Yes"

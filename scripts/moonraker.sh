@@ -186,6 +186,7 @@ function moonraker_setup() {
 
   ### step 1: clone moonraker
   clone_moonraker "${MOONRAKER_REPO}"
+  dispose_moonraker
   ### step 2: install moonraker dependencies and create python virtualenv
   status_msg "Installing dependencies ..."
   install_moonraker_dependencies
@@ -262,7 +263,6 @@ function clone_moonraker() {
     print_error "Cloning Moonraker from\n ${repo}\n failed!"
     exit 1
   fi
-  dispose_moonraker
 }
 
 function create_moonraker_conf() {

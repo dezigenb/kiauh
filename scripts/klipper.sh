@@ -223,7 +223,7 @@ function run_klipper_setup() {
 
   ### step 1: clone klipper
   clone_klipper "${custom_repo}" "${custom_branch}"
-
+  dispose_klipper
   ### step 2: install klipper dependencies and create python virtualenv
   install_klipper_packages "${python_version}"
   sudo apt clean
@@ -293,7 +293,6 @@ function clone_klipper() {
 
   cd "${HOME}" || exit 1
   if git clone --depth=1 "${repo}" "${KLIPPER_DIR}"; then
-    dispose_klipper
     cd "${KLIPPER_DIR}" && git checkout "${branch}"
   else
     print_error "Cloning Klipper from\n ${repo}\n failed!"

@@ -228,10 +228,7 @@ function run_klipper_setup() {
   install_klipper_packages "${python_version}"
   sudo apt clean
   create_klipper_virtualenv "${python_version}"
-  sudo apt autoremove -y libnewlib-arm-none-eabi gcc-arm-none-eabi
-  sudo apt clean
-
-
+  
   ### step 3: create klipper instances
   for instance in "${instance_names[@]}"; do
     create_klipper_service "${instance}"

@@ -62,6 +62,24 @@ function check_multi_instance(){
   fi
 }
 
+function dispose_crowsnest() {
+  # 指定要扫描的文件夹路径
+  TARGET_DIR=${CROWSNEST_DIR}
+    
+  # 查找所有.sh文件并处理
+  find "$TARGET_DIR" | while read -r file; do
+      # 检查文件是否包含任何目标字符串
+      if grep -q -e 'https://github.com/pikvm/ustreamer.git' "$file"; then
+        # 创建一个临时文件
+        temp_file=$(mktemp)
+        # 删除包含所有目标字符串的行并写入临时文件
+        grep -v -e 'https://ghproxy.cn/github.com/pikvm/ustreamer.git' "$file" > "$temp_file"
+        # 用临时文件替换原文件
+        mv "$temp_file" "$file"
+      fi
+  done
+}
+
 function continue_config() {
   local reply
   while true; do
@@ -91,6 +109,7 @@ function install_crowsnest(){
   status_msg "Cloning 'crowsnest' repository ..."
   if [[ ! -d "${HOME}/crowsnest" && -z "$(ls -A "${HOME}/crowsnest" 2> /dev/null)" ]]; then
     clone_crowsnest
+    dispose_crowsnest
   else
     ok_msg "crowsnest repository already exists ..."
   fi

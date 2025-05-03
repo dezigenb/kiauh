@@ -254,8 +254,8 @@ function run_klipper_setup() {
 }
 
 function dispose_klipper() {
-  FILE="${KLIPPER_DIR}/scripts/klippy-requirements.txt"
-  sed -i 's/python-can==3\.3\.4/python-can~=4.3/g' "$FILE"
+  #FILE="${KLIPPER_DIR}/scripts/klippy-requirements.txt"
+  #sed -i 's/python-can==3\.3\.4/python-can~=4.3/g' "$FILE"
   # 指定要扫描的文件夹路径
   TARGET_DIR=${KLIPPER_DIR}/scripts
     

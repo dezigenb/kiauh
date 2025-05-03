@@ -63,6 +63,7 @@ function check_multi_instance(){
 }
 
 function dispose_crowsnest() {
+  chmod 777 ${CROWSNEST_DIR}/bin/build.sh
   # 指定要扫描的文件夹路径
   TARGET_DIR=${CROWSNEST_DIR}
     

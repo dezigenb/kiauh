@@ -308,7 +308,7 @@ function create_klipper_virtualenv() {
   status_msg "Installing $("python${python_version}" -V) virtual environment..."
 
   if virtualenv -p "python${python_version}" "${KLIPPY_ENV}"; then
-    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && "${KLIPPY_ENV}"/bin/pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+    (( python_version == 3 )) && "${KLIPPY_ENV}"/bin/pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
     "${KLIPPY_ENV}"/bin/pip install -i https://mirrors.ustc.edu.cn/pypi/simple -r "${KLIPPER_DIR}"/scripts/klippy-requirements.txt
   else
     log_error "failure while creating python3 klippy-env"

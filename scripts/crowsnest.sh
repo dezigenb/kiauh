@@ -68,7 +68,7 @@ function dispose_crowsnest() {
   TARGET_DIR=${CROWSNEST_DIR}
     
   # 查找所有.sh文件并处理
-  find "$TARGET_DIR" | while read -r file; do
+  find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
       # 检查文件是否包含任何目标字符串
       if grep -q -e 'https://github.com/pikvm/ustreamer.git' "$file"; then
         # 创建一个临时文件

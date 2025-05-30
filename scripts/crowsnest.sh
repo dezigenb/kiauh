@@ -78,6 +78,14 @@ function dispose_crowsnest() {
         # 用临时文件替换原文件
         mv "$temp_file" "$file"
       fi
+      if grep -q -e 'sudo -u "${BASE_USER}" "${PWD}"/bin/build.sh --build' "$file"; then
+        # 创建一个临时文件
+        temp_file=$(mktemp)
+        # 删除包含所有目标字符串的行并写入临时文件
+        grep -v -e 'sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build' "$file" > "$temp_file"
+        # 用临时文件替换原文件
+        mv "$temp_file" "$file"
+      fi
   done
 }
 

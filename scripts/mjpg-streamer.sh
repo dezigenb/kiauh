@@ -19,7 +19,7 @@ function install_mjpg-streamer() {
   local webcamd="${KIAUH_SRCDIR}/resources/mjpg-streamer/webcamd"
   local webcam_txt="${KIAUH_SRCDIR}/resources/mjpg-streamer/webcam.txt"
   local service="${KIAUH_SRCDIR}/resources/mjpg-streamer/webcamd.service"
-  local repo="https://ghproxy.cn/https://github.com/jacksonliam/mjpg-streamer.git"
+  local repo="${gitmirror}https://github.com/jacksonliam/mjpg-streamer.git"
 
   ### return early if webcamd.service already exists
   if [[ -f "${SYSTEMD}/webcamd.service" ]]; then

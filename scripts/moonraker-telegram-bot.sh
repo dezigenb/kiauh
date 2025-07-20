@@ -525,7 +525,7 @@ function patch_telegram_bot_update_manager() {
 [update_manager moonraker-telegram-bot]
 type: git_repo
 path: ~/moonraker-telegram-bot
-origin: https://ghproxy.cn/https://github.com/nlef/moonraker-telegram-bot.git
+origin: ${gitmirror}https://github.com/nlef/moonraker-telegram-bot.git
 env: ~/moonraker-telegram-bot-env/bin/python
 requirements: scripts/requirements.txt
 install_script: scripts/install.sh

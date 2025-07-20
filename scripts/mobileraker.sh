@@ -228,7 +228,7 @@ function patch_mobileraker_update_manager() {
 [update_manager mobileraker]
 type: git_repo
 path: ${HOME}/mobileraker_companion
-origin: https://ghproxy.cn/https://github.com/Clon1998/mobileraker_companion.git
+origin: ${gitmirror}https://github.com/Clon1998/mobileraker_companion.git
 primary_branch:main
 managed_services: mobileraker
 env: ${HOME}/mobileraker-env/bin/python

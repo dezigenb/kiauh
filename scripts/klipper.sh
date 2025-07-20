@@ -281,8 +281,7 @@ function clone_klipper() {
   local repo=${1} branch=${2}
 
   [[ -z ${repo} ]] && repo="${KLIPPER_REPO}"
-  repo=$(echo "${repo}" | sed -r "s/^(http|https):\/\/ghproxy\.cn\///i; s/\.git$//")
-  repo="https://ghproxy.cn/${repo}"
+  repo="${gitmirror}${repo}"
 
   [[ -z ${branch} ]] && branch="master"
 
@@ -293,6 +292,7 @@ function clone_klipper() {
 
   cd "${HOME}" || exit 1
   if git clone --depth=1 "${repo}" "${KLIPPER_DIR}"; then
+    echo ${repo}
     cd "${KLIPPER_DIR}" && git checkout "${branch}"
   else
     print_error "Cloning Klipper from\n ${repo}\n failed!"

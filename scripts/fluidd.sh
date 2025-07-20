@@ -113,7 +113,7 @@ function install_fluidd_macros() {
 function download_fluidd_macros() {
   local ms_cfg_repo path configs regex line gcode_dir
 
-  ms_cfg_repo="https://ghproxy.cn/https://github.com/fluidd-core/fluidd-config.git"
+  ms_cfg_repo="${gitmirror}https://github.com/fluidd-core/fluidd-config.git"
   regex="${HOME//\//\\/}\/([A-Za-z0-9_]+)\/config\/printer\.cfg"
   configs=$(find "${HOME}" -maxdepth 3 -regextype posix-extended -regex "${regex}" | sort)
 
@@ -365,7 +365,7 @@ function get_fluidd_download_url() {
   local releases_by_tag tags tag unstable_url url
 
   ### latest stable download url
-  url="https://ghproxy.cn/https://github.com/fluidd-core/fluidd/releases/latest/download/fluidd.zip"
+  url="${gitmirror}https://github.com/fluidd-core/fluidd/releases/latest/download/fluidd.zip"
 
   read_kiauh_ini "${FUNCNAME[0]}"
   if [[ ${fluidd_install_unstable} == "true" ]]; then
@@ -374,7 +374,7 @@ function get_fluidd_download_url() {
     tag=$(echo "${tags}" | head -1)
 
     ### latest unstable download url including pre-releases (alpha, beta, rc)
-    unstable_url="https://ghproxy.cn/https://github.com/fluidd-core/fluidd/releases/download/${tag}/fluidd.zip"
+    unstable_url="${gitmirror}https://github.com/fluidd-core/fluidd/releases/download/${tag}/fluidd.zip"
 
     if [[ ${unstable_url} == *"download//"* ]]; then
       warn_msg "Download URL broken! Falling back to URL of latest stable release!"
@@ -496,7 +496,7 @@ function patch_fluidd_config_update_manager() {
 type: git_repo
 primary_branch: master
 path: ~/fluidd-config
-origin: https://ghproxy.cn/https://github.com/fluidd-core/fluidd-config.git
+origin: ${gitmirror}https://github.com/fluidd-core/fluidd-config.git
 managed_services: klipper
 MOONRAKER_CONF
 

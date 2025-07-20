@@ -29,6 +29,8 @@ function main() {
   launch_kiauh_v5
 }
 
+gitmirror=https://ghproxy.cn/
+
 check_if_ratos
 check_euid
 init_logfile

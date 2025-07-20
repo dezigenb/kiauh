@@ -74,7 +74,7 @@ function dispose_crowsnest() {
         # 创建一个临时文件
         temp_file=$(mktemp)
         # 删除包含所有目标字符串的行并写入临时文件
-        grep -v -e 'https://ghproxy.cn/github.com/pikvm/ustreamer.git' "$file" > "$temp_file"
+        grep -v -e '${gitmirror}github.com/pikvm/ustreamer.git' "$file" > "$temp_file"
         # 用临时文件替换原文件
         mv "$temp_file" "$file"
       fi
@@ -118,6 +118,7 @@ function install_crowsnest(){
   status_msg "Cloning 'crowsnest' repository ..."
   if [[ ! -d "${HOME}/crowsnest" && -z "$(ls -A "${HOME}/crowsnest" 2> /dev/null)" ]]; then
     clone_crowsnest
+    sleep 2
     dispose_crowsnest
   else
     ok_msg "crowsnest repository already exists ..."

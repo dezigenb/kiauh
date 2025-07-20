@@ -112,7 +112,7 @@ function install_mainsail_macros() {
 function download_mainsail_macros() {
   local ms_cfg_repo path configs regex line gcode_dir
 
-  ms_cfg_repo="https://ghproxy.cn/https://github.com/mainsail-crew/mainsail-config.git"
+  ms_cfg_repo="${gitmirror}https://github.com/mainsail-crew/mainsail-config.git"
   regex="${HOME//\//\\/}\/([A-Za-z0-9_]+)\/config\/printer\.cfg"
   configs=$(find "${HOME}" -maxdepth 3 -regextype posix-extended -regex "${regex}" | sort)
 
@@ -380,7 +380,7 @@ function print_theme_list() {
 
 function ms_theme_installer_menu() {
   local theme_list theme_author theme_repo theme_name theme_note theme_url
-  local theme_csv_url="https://ghproxy.cn/https://raw.githubusercontent.com/mainsail-crew/gb-docs/main/_data/themes.csv"
+  local theme_csv_url="${gitmirror}https://raw.githubusercontent.com/mainsail-crew/gb-docs/main/_data/themes.csv"
   theme_list=$(curl -s -L "${theme_csv_url}")
 
   top_border
@@ -409,7 +409,7 @@ function ms_theme_installer_menu() {
   while true; do
     read -p "${cyan}Install theme:${white} " option
     if (( option > 0 &&  option < ${#theme_name[@]} )); then
-      theme_url="https://ghproxy.cn/https://github.com/${theme_author[${option}]}/${theme_repo[${option}]}"
+      theme_url="${gitmirror}https://github.com/${theme_author[${option}]}/${theme_repo[${option}]}"
       ms_theme_install "${theme_url}" "${theme_name[${option}]}" "${theme_note[${option}]}"
       break
     elif [[ ${option} == "R" || ${option} == "r" ]]; then
@@ -536,7 +536,7 @@ function get_mainsail_download_url() {
   local releases_by_tag tags tag unstable_url url
 
   ### latest stable download url
-  url="https://ghproxy.cn/https://github.com/mainsail-crew/mainsail/releases/latest/download/mainsail.zip"
+  url="${gitmirror}https://github.com/mainsail-crew/mainsail/releases/latest/download/mainsail.zip"
 
   read_kiauh_ini "${FUNCNAME[0]}"
   if [[ ${mainsail_install_unstable} == "true" ]]; then
@@ -545,7 +545,7 @@ function get_mainsail_download_url() {
     tag=$(echo "${tags}" | head -1)
 
     ### latest unstable download url including pre-releases (alpha, beta, rc)
-    unstable_url="https://ghproxy.cn/https://github.com/mainsail-crew/mainsail/releases/download/${tag}/mainsail.zip"
+    unstable_url="${gitmirror}https://github.com/mainsail-crew/mainsail/releases/download/${tag}/mainsail.zip"
 
     if [[ ${unstable_url} == *"download//"* ]]; then
       warn_msg "Download URL broken! Falling back to URL of latest stable release!"
@@ -675,7 +675,7 @@ function patch_mainsail_config_update_manager() {
 type: git_repo
 primary_branch: master
 path: ~/mainsail-config
-origin: https://ghproxy.cn/https://github.com/mainsail-crew/mainsail-config.git
+origin: ${gitmirror}https://github.com/mainsail-crew/mainsail-config.git
 managed_services: klipper
 MOONRAKER_CONF
 

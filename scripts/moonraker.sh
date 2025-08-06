@@ -233,7 +233,7 @@ function dispose_moonraker() {
         perl -0777 -pe '
             s/"wireless-tools; distro_id != '\''ubuntu'\'' or distro_version <= '\''24.04'\''"/"wireless-tools"/g;
             s/"iw; distro_id == '\''ubuntu'\'' and distro_version >= '\''24.10'\''"/"iw"/gs;
-            s/"python3-libcamera; vendor == '\''raspberry-pi'\'' and distro_version >= '\''11'\''"/"python3-libcamera"/gs;
+            s/^.*"python3-libcamera; vendor == '\''raspberry-pi'\'' and distro_version >= '\''11'\''".*\n//g;
         ' "$file" > "$temp_file"
         
         # 检查是否有变化

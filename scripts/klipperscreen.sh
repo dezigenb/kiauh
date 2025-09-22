@@ -42,7 +42,7 @@ function install_klipperscreen() {
 }
 
 function klipperscreen_setup() {
-  local dep=(wget curl unzip dfu-util)
+  local dep=(wget curl unzip dfu-util ttf-wqy-zenhei)
   dependency_check "${dep[@]}"
   status_msg "Cloning KlipperScreen from ${KLIPPERSCREEN_REPO} ..."
 

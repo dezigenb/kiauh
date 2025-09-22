@@ -41,6 +41,11 @@ function install_klipperscreen() {
   do_action_service "restart" "KlipperScreen"
 }
 
+function replace_mirrors() {
+  FILE="${KLIPPERSCREEN_DIR}/scripts/KlipperScreen-install.sh"
+  sed -i 's|https://www.piwheels.org/simple|https://mirrors.ustc.edu.cn/pypi/simple|g' "$FILE"
+}
+
 function klipperscreen_setup() {
   local dep=(wget curl unzip dfu-util ttf-wqy-zenhei)
   dependency_check "${dep[@]}"
@@ -55,6 +60,8 @@ function klipperscreen_setup() {
     print_error "Cloning KlipperScreen from\n ${KLIPPERSCREEN_REPO}\n failed!"
     exit 1
   fi
+
+  replace_mirrors
 
   status_msg "Installing KlipperScreen ..."
   if "${KLIPPERSCREEN_DIR}"/scripts/KlipperScreen-install.sh; then

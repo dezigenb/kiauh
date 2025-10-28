@@ -69,16 +69,16 @@ function dispose_crowsnest() {
     
   # 查找所有.sh文件并处理
   find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
-    # 创建一个临时文件
     temp_file=$(mktemp)
     
-    # 使用sed处理所有替换
-    sed -e 's|https://github.com/pikvm/ustreamer\.git|${gitmirror}github.com/pikvm/ustreamer.git|g' \
+    # 对 gitmirror 进行转义
+    escaped_gitmirror=$(printf '%s\n' "$gitmirror" | sed 's/[\/&]/\\&/g')
+    
+    sed -e "s|https://github\.com/pikvm/ustreamer\.git|${escaped_gitmirror}github.com/pikvm/ustreamer.git|g" \
         -e 's|sudo -u "${BASE_USER}" "${PWD}"/bin/build\.sh --build|sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build|g' \
-        -e 's|https://github.com/mryel00/camera-streamer\.git|${gitmirror}https://github.com/mryel00/camera-streamer.git|g' \
+        -e "s|https://github\.com/mryel00/camera-streamer\.git|${escaped_gitmirror}https://github.com/mryel00/camera-streamer.git|g" \
         "$file" > "$temp_file"
     
-    # 用临时文件替换原文件
     mv "$temp_file" "$file"
   done
 }

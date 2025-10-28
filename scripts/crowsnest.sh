@@ -69,25 +69,17 @@ function dispose_crowsnest() {
     
   # 查找所有.sh文件并处理
   find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
-      # 检查文件是否包含任何目标字符串
-      if grep -q -e 'https://github.com/pikvm/ustreamer.git' "$file"; then
-        # 创建一个临时文件
-        temp_file=$(mktemp)
-        # 删除包含所有目标字符串的行并写入临时文件
-        grep -v -e '${gitmirror}github.com/pikvm/ustreamer.git' "$file" > "$temp_file"
-        # 用临时文件替换原文件
-        mv "$temp_file" "$file"
-      fi
-      if grep -q -e 'sudo -u "${BASE_USER}" "${PWD}"/bin/build.sh --build' "$file"; then
-        temp_file=$(mktemp)
-        grep -v -e 'sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build' "$file" > "$temp_file"
-        mv "$temp_file" "$file"
-      fi
-      if grep -q -e 'https://github.com/mryel00/camera-streamer.git' "$file"; then
-        temp_file=$(mktemp)
-        grep -v -e '${gitmirror}https://github.com/mryel00/camera-streamer.git' "$file" > "$temp_file"
-        mv "$temp_file" "$file"
-      fi
+    # 创建一个临时文件
+    temp_file=$(mktemp)
+    
+    # 使用sed处理所有替换
+    sed -e 's|https://github.com/pikvm/ustreamer\.git|${gitmirror}github.com/pikvm/ustreamer.git|g' \
+        -e 's|sudo -u "${BASE_USER}" "${PWD}"/bin/build\.sh --build|sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build|g' \
+        -e 's|https://github.com/mryel00/camera-streamer\.git|${gitmirror}https://github.com/mryel00/camera-streamer.git|g' \
+        "$file" > "$temp_file"
+    
+    # 用临时文件替换原文件
+    mv "$temp_file" "$file"
   done
 }
 

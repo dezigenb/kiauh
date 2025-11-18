@@ -74,7 +74,7 @@ function dispose_crowsnest() {
     # 对 gitmirror 进行转义
     escaped_gitmirror=$(printf '%s\n' "$gitmirror" | sed 's/[\/&]/\\&/g')
     
-    sed -e "s|https://github\.com/pikvm/ustreamer\.git|${escaped_gitmirror}github.com/pikvm/ustreamer.git|g" \
+    sed -e "s|https://github\.com/pikvm/ustreamer\.git|${escaped_gitmirror}https://github.com/pikvm/ustreamer.git|g" \
         -e 's|sudo -u "${BASE_USER}" "${PWD}"/bin/build\.sh --build|sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build|g' \
         -e "s|https://github\.com/mryel00/camera-streamer\.git|${escaped_gitmirror}https://github.com/mryel00/camera-streamer.git|g" \
         "$file" > "$temp_file"
@@ -114,6 +114,7 @@ function install_crowsnest(){
     clone_crowsnest
     sleep 2
     dispose_crowsnest
+    chmod -R +x ${HOME}/crowsnest
   else
     ok_msg "crowsnest repository already exists ..."
   fi

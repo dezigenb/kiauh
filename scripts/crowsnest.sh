@@ -137,7 +137,6 @@ function install_crowsnest(){
   # Step 5: Leave directory (twice due two pushd)
   popd &> /dev/null || exit 1
   popd &> /dev/null || exit 1
-  clone_crowsnest
 }
 
 # Remove func

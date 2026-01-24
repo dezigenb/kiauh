@@ -71,12 +71,7 @@ function dispose_crowsnest() {
   find "$TARGET_DIR" -type f -name "*.sh" | while read -r file; do
     temp_file=$(mktemp)
     
-    # 对 gitmirror 进行转义
-    escaped_gitmirror=$(printf '%s\n' "$gitmirror" | sed 's/[\/&]/\\&/g')
-    
-    sed -e "s|https://github\.com/pikvm/ustreamer\.git|${escaped_gitmirror}https://github.com/pikvm/ustreamer.git|g" \
-        -e 's|sudo -u "${BASE_USER}" "${PWD}"/bin/build\.sh --build|sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build|g' \
-        -e "s|https://github\.com/mryel00/camera-streamer\.git|${escaped_gitmirror}https://github.com/mryel00/camera-streamer.git|g" \
+    sed -e 's|sudo -u "${BASE_USER}" "${PWD}"/bin/build\.sh --build|sudo -u "${BASE_USER}" bash "${PWD}"/bin/build.sh --build|g' \
         "$file" > "$temp_file"
     
     mv "$temp_file" "$file"

@@ -281,7 +281,7 @@ function clone_klipper() {
   local repo=${1} branch=${2}
 
   [[ -z ${repo} ]] && repo="${KLIPPER_REPO}"
-  repo="${gitmirror}${repo}"
+  repo="${repo}"
 
   [[ -z ${branch} ]] && branch="master"
 

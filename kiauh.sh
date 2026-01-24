@@ -14,6 +14,7 @@ clear -x
 umask 022
 
 KIAUH_SRCDIR="$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")"
+KIAUH_CONFIGURED_MIRROR=""
 
 for script in "${KIAUH_SRCDIR}/scripts/"*.sh; do . "${script}"; done
 for script in "${KIAUH_SRCDIR}/scripts/ui/"*.sh; do . "${script}"; done
@@ -177,9 +178,69 @@ function check_disk_space() {
     echo ""
 }
 
-check_disk_space
+function set_git_global_proxy() {
+    if [[ -z "$gitmirror" ]]; then
+        return
+    fi
 
+    echo -e "正在配置 Git 全局镜像重定向 (url.insteadOf)..."
+    
+    git config --global url."${gitmirror}https://github.com/".insteadOf "https://github.com/"
+
+    KIAUH_CONFIGURED_MIRROR="$gitmirror"
+}
+
+function cleanup_git_proxy() {
+    if [[ -n "$KIAUH_CONFIGURED_MIRROR" ]]; then
+        echo ""
+        echo "正在移除 Git 全局镜像设置..."
+        git config --global --unset url."${KIAUH_CONFIGURED_MIRROR}https://github.com/".insteadOf
+        KIAUH_CONFIGURED_MIRROR=""
+    fi
+}
+
+trap cleanup_git_proxy EXIT SIGINT SIGTERM
+
+function wget() {
+    if [[ -z "$gitmirror" ]]; then
+        command wget "$@"
+        return $?
+    fi
+
+    local args=()
+    for arg in "$@"; do
+        if [[ "$arg" == https://github.com/* ]] || [[ "$arg" == https://raw.githubusercontent.com/* ]]; then
+            echo -e "\033[33m[自动加速]\033[0m 正在通过镜像下载: ${arg}"
+            args+=("${gitmirror}${arg}")
+        else
+            args+=("$arg")
+        fi
+    done
+    command wget "${args[@]}"
+}
+
+function curl() {
+    if [[ -z "$gitmirror" ]]; then
+        command curl "$@"
+        return $?
+    fi
+
+    local args=()
+    for arg in "$@"; do
+        if [[ "$arg" == https://github.com/* ]] || [[ "$arg" == https://raw.githubusercontent.com/* ]]; then
+            echo -e "\033[33m[自动加速]\033[0m 正在通过镜像请求: ${arg}"
+            args+=("${gitmirror}${arg}")
+        else
+            args+=("$arg")
+        fi
+    done
+
+    command curl "${args[@]}"
+}
+
+check_disk_space
 select_best_mirror
+set_git_global_proxy
 
 check_if_ratos
 check_euid

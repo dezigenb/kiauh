@@ -145,6 +145,40 @@ function select_best_mirror() {
     sleep 1
 }
 
+function check_disk_space() {
+    local MIN_REQ_KB=2621440
+    local AVAILABLE_KB=$(df -k . | awk 'NR==2 {print $4}')
+    local AVAILABLE_GB=$(awk "BEGIN {printf \"%.2f\", $AVAILABLE_KB/1024/1024}")
+    echo -e "正在检测磁盘空间..."
+
+    if [[ "$AVAILABLE_KB" -lt "$MIN_REQ_KB" ]]; then
+        echo "------------------------------------------------------------"
+        echo -e "\033[31m警告: 磁盘空间可能不足!\033[0m"
+        echo "------------------------------------------------------------"
+        echo -e "当前可用空间: \033[31m${AVAILABLE_GB} GB\033[0m"
+        echo -e "建议最小空间: \033[32m2.50 GB\033[0m"
+        echo ""
+        echo "空间不足将导致安装失败。"
+        echo "------------------------------------------------------------"
+        local choice
+        read -p "是否强制继续安装? [y/N]: " choice
+        case "${choice,,}" in
+            y|yes)
+                echo -e "已忽略警告，\033[33m强制继续...\033[0m"
+                ;;
+            *)
+                echo "操作已取消，请清理空间后再试。"
+                exit 1
+                ;;
+        esac
+    else
+        echo -e "磁盘空间检测: \033[32m合格 (剩余 ${AVAILABLE_GB} GB)\033[0m"
+    fi
+    echo ""
+}
+
+check_disk_space
+
 select_best_mirror
 
 check_if_ratos
